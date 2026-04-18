@@ -118,6 +118,35 @@
     --callout-icon: var(--callout-icon-quote);
   }
 
+  // Custom QA-vault callouts, aligned with graph folder colors (see quartz.layout.ts).
+  &[data-callout="spec-issue"] {
+    --color: #a86ec9;
+    --border: #a86ec944;
+    --bg: #a86ec910;
+    --callout-icon: var(--callout-icon-abstract);
+  }
+
+  &[data-callout="task"] {
+    --color: #4a90e2;
+    --border: #4a90e244;
+    --bg: #4a90e210;
+    --callout-icon: var(--callout-icon-todo);
+  }
+
+  &[data-callout="coupon"] {
+    --color: #6aa84f;
+    --border: #6aa84f44;
+    --bg: #6aa84f10;
+    --callout-icon: var(--callout-icon-success);
+  }
+
+  &[data-callout="coverage"] {
+    --color: #f1c232;
+    --border: #f1c23244;
+    --bg: #f1c23210;
+    --callout-icon: var(--callout-icon-example);
+  }
+
   &.is-collapsed {
     & > .callout-title > .fold-callout-icon {
       transform: rotateZ(-90deg);

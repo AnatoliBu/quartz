@@ -1,5 +1,172 @@
 @use "../../styles/variables.scss" as *;
 
+.graph-legend {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 10;
+  padding: 0.4rem 0.5rem;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
+  border-radius: 6px;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: #fff;
+  max-height: 70%;
+  overflow: hidden;
+  font-weight: 500;
+  user-select: none;
+
+  .graph-legend-row {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition:
+      opacity 0.15s ease,
+      background-color 0.15s ease;
+  }
+
+  &.has-filter .graph-legend-row {
+    opacity: 0.4;
+  }
+
+  .graph-legend-row.active,
+  &.has-filter .graph-legend-row.active {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .graph-legend-row:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .graph-legend-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+}
+
+// v2: search input inside legend
+.graph-legend-search {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0 0 0.35rem 0;
+  padding: 0.25rem 0.4rem;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 0.75rem;
+  font-family: inherit;
+  outline: none;
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  &:focus {
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.14);
+  }
+}
+
+// v2: stats panel (top-right inside graph container)
+.graph-stats {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 10;
+  padding: 0.45rem 0.6rem;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
+  border-radius: 6px;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: #fff;
+  font-weight: 500;
+  user-select: none;
+  max-width: 16rem;
+
+  .graph-stats-row {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .graph-stats-heading {
+    margin-top: 0.35rem;
+    font-weight: 600;
+    opacity: 0.85;
+  }
+
+  .graph-stats-hub {
+    padding-left: 0.5rem;
+    opacity: 0.9;
+  }
+
+  .graph-stats-actions {
+    display: flex;
+    gap: 0.3rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .graph-stats-btn {
+    cursor: pointer;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    font-size: 0.7rem;
+    font-family: inherit;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    &.active {
+      background: rgba(255, 255, 255, 0.28);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+  }
+}
+
+// v2: hover tooltip — bottom-center of the graph container
+.graph-hover-info {
+  position: absolute;
+  left: 50%;
+  bottom: 0.6rem;
+  transform: translateX(-50%);
+  z-index: 11;
+  padding: 0.25rem 0.6rem;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  color: #fff;
+  font-size: 0.75rem;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.12s ease;
+  max-width: 80%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &.visible {
+    opacity: 1;
+  }
+}
+
 .graph {
   & > h3 {
     font-size: 1rem;

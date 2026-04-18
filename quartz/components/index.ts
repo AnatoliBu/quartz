@@ -8,6 +8,8 @@ import ReaderMode from "./ReaderMode"
 import Head from "./Head"
 import PageTitle from "./PageTitle"
 import ContentMeta from "./ContentMeta"
+import Frontmatter from "./Frontmatter"
+import FrontmatterFilters from "./FrontmatterFilters"
 import Spacer from "./Spacer"
 import TableOfContents from "./TableOfContents"
 import Explorer from "./Explorer"
@@ -23,6 +25,10 @@ import Breadcrumbs from "./Breadcrumbs"
 import Comments from "./Comments"
 import Flex from "./Flex"
 import ConditionalRender from "./ConditionalRender"
+import WikiLinkPreview from "./WikiLinkPreview"
+import HeadingAnchors from "./HeadingAnchors"
+import ReadingProgress from "./ReadingProgress"
+import CommandPalette from "./CommandPalette"
 
 export {
   ArticleTitle,
@@ -34,6 +40,8 @@ export {
   Head,
   PageTitle,
   ContentMeta,
+  Frontmatter,
+  FrontmatterFilters,
   Spacer,
   TableOfContents,
   Explorer,
@@ -50,4 +58,8 @@ export {
   Comments,
   Flex,
   ConditionalRender,
+  WikiLinkPreview,
+  HeadingAnchors,
+  ReadingProgress,
+  CommandPalette,
 }

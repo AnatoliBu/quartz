@@ -19,6 +19,10 @@ export interface D3Config {
   showTags: boolean
   focusOnHover?: boolean
   enableRadial?: boolean
+  highlightColor?: string
+  colorGroups?: Record<string, string>
+  autoColorFolders?: boolean
+  persistPositions?: boolean
 }
 
 interface GraphOptions {

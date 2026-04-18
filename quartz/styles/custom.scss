@@ -1,3 +1,17 @@
 @use "./base.scss";
 
-// put your custom CSS here!
+// B2 — Steps auto-numbered h3. Opt-in via frontmatter `has_steps: true`
+// which sets data-has-steps on <article> (see Content.tsx).
+article[data-has-steps="true"] {
+  counter-reset: qa-step;
+
+  h3 {
+    counter-increment: qa-step;
+    &::before {
+      content: counter(qa-step) ". ";
+      color: var(--secondary);
+      font-weight: 700;
+      margin-right: 0.25rem;
+    }
+  }
+}

@@ -7,6 +7,7 @@ import { QuartzEmitterPlugin } from "../types"
 import { toHtml } from "hast-util-to-html"
 import { write } from "./helpers"
 import { i18n } from "../../i18n"
+import { indexedFrontmatterKeys } from "../../../quartz.frontmatter-fields"
 
 export type ContentIndexMap = Map<FullSlug, ContentDetails>
 export type ContentDetails = {
@@ -19,6 +20,45 @@ export type ContentDetails = {
   richContent?: string
   date?: Date
   description?: string
+  // Plain-text excerpt (~280 chars, word-aware) used by WikiLinkPreview.
+  // Sanitised, no markdown — safe to inject via textContent.
+  excerpt?: string
+  // Arbitrary frontmatter fields picked up from quartz.frontmatter-fields.ts.
+  // Used by graph status/recency overlay and FolderContent filters. Keys are
+  // dynamic; the emitter reads `indexedFrontmatterKeys` to decide what to
+  // copy. Values are stringified (dates → ISO).
+  frontmatterValues?: Record<string, string>
+  // Legacy aliases retained for graph overlay code.
+  status?: string
+  created?: string
+  updated?: string
+}
+
+const EXCERPT_MAX = 280
+
+// Description plugin HTML-escapes `file.data.text` before we see it. The
+// excerpt is rendered with textContent / JSX children downstream, so entities
+// like `&amp;` would be shown literally. Reverse the most common escapes to
+// get back readable plain text.
+function unescapeBasicEntities(s: string): string {
+  return s
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, " ")
+}
+
+function buildExcerpt(description: string | undefined, text: string | undefined): string {
+  const source = description && description.length >= 80 ? description : (text ?? "")
+  const normalized = unescapeBasicEntities(source).replace(/\s+/g, " ").trim()
+  if (!normalized) return ""
+  if (normalized.length <= EXCERPT_MAX) return normalized
+  const cut = normalized.slice(0, EXCERPT_MAX)
+  const lastSpace = cut.lastIndexOf(" ")
+  const end = lastSpace > EXCERPT_MAX * 0.6 ? lastSpace : EXCERPT_MAX
+  return normalized.slice(0, end).replace(/[,;:.\-–—]+$/, "") + "…"
 }
 
 interface Options {
@@ -103,6 +143,19 @@ export const ContentIndex: QuartzEmitterPlugin<Partial<Options>> = (opts) => {
         const slug = file.data.slug!
         const date = getDate(ctx.cfg.configuration, file.data) ?? new Date()
         if (opts?.includeEmptyFiles || (file.data.text && file.data.text !== "")) {
+          const fm = file.data.frontmatter as Record<string, unknown> | undefined
+          const asString = (v: unknown): string | undefined => {
+            if (v == null) return undefined
+            if (v instanceof Date) return v.toISOString()
+            return String(v)
+          }
+          const frontmatterValues: Record<string, string> = {}
+          if (fm) {
+            for (const key of indexedFrontmatterKeys) {
+              const s = asString(fm[key])
+              if (s !== undefined) frontmatterValues[key] = s
+            }
+          }
           linkIndex.set(slug, {
             slug,
             filePath: file.data.relativePath!,
@@ -115,6 +168,12 @@ export const ContentIndex: QuartzEmitterPlugin<Partial<Options>> = (opts) => {
               : undefined,
             date: date,
             description: file.data.description ?? "",
+            excerpt: buildExcerpt(file.data.description, file.data.text),
+            frontmatterValues,
+            // Legacy aliases consumed by graph.inline.ts overlay code.
+            status: frontmatterValues.status,
+            created: frontmatterValues.created,
+            updated: frontmatterValues.updated_at ?? frontmatterValues.updated,
           })
         }
       }

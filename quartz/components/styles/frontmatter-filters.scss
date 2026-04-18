@@ -1,0 +1,143 @@
+.frontmatter-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.9rem;
+  margin: 0.75rem 0;
+  font-size: 0.8rem;
+  color: var(--dark);
+
+  &:empty {
+    display: none;
+  }
+
+  .frontmatter-filter-field {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .frontmatter-filter-label {
+    opacity: 0.7;
+    font-weight: 500;
+    margin-right: 0.2rem;
+  }
+
+  .frontmatter-filter-chip {
+    --chip-color: var(--gray);
+    cursor: pointer;
+    padding: 0.08rem 0.55rem;
+    font: inherit;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    border-radius: 999px;
+    color: var(--dark);
+    background: transparent;
+    border: 1px solid var(--chip-color);
+    opacity: 0.55;
+    transition:
+      opacity 0.12s ease,
+      background-color 0.12s ease,
+      color 0.12s ease;
+
+    &:hover {
+      opacity: 0.9;
+    }
+
+    &.active {
+      opacity: 1;
+      background: var(--chip-color);
+      color: #fff;
+    }
+  }
+
+  .frontmatter-filter-count {
+    margin-left: auto;
+    font-size: 0.72rem;
+    opacity: 0.6;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+// Per-file badges injected into each .section-li .meta row
+.frontmatter-file-badges {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: 0.55rem;
+  vertical-align: middle;
+
+  .frontmatter-file-badge {
+    display: inline-block;
+    padding: 0.05rem 0.45rem;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+    color: #fff;
+    background: var(--gray);
+    border: 1px solid var(--gray);
+  }
+}
+
+// Visual separation between list items on folder / tag pages.
+// Without this, multi-line titles (e.g. long BUG-NNN headers) merge into
+// one left-aligned wall of text. A thin divider + spacing makes item
+// boundaries obvious. Scoped globally since .section-ul ships from core
+// PageList, but only loads when this stylesheet is included (folder pages).
+.section-ul {
+  list-style: none;
+  padding-left: 0;
+
+  > .section-li {
+    padding: 0.7rem 0 0.8rem;
+    border-bottom: 1px solid var(--lightgray);
+
+    &:first-child {
+      border-top: 1px solid var(--lightgray);
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .section {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.25rem 0.8rem;
+
+      > .meta {
+        flex: 0 0 auto;
+        margin: 0;
+        font-size: 0.78rem;
+        color: var(--gray);
+        white-space: nowrap;
+      }
+
+      > .desc {
+        flex: 1 1 14rem;
+        min-width: 0;
+      }
+
+      > .tags {
+        flex: 1 1 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+        margin: 0.2rem 0 0;
+        padding: 0;
+        list-style: none;
+      }
+    }
+
+    .desc h3 {
+      font-size: 1rem;
+      line-height: 1.35;
+      margin: 0;
+    }
+  }
+}

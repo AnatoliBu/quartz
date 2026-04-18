@@ -89,6 +89,18 @@ const contextWindowWords = 30
 const numSearchResults = 8
 const numTagResults = 5
 
+// Per-document multiplier from frontmatter `search_boost`. Clamped 0.5..5.
+const SEARCH_BOOST_MIN = 0.5
+const SEARCH_BOOST_MAX = 5
+const SEARCH_BOOST_DEFAULT = 1
+const boostByIdx: number[] = []
+
+function normalizeBoost(raw: unknown): number {
+  const n = typeof raw === "number" ? raw : Number(raw)
+  if (!Number.isFinite(n) || n <= 0) return SEARCH_BOOST_DEFAULT
+  return Math.min(Math.max(n, SEARCH_BOOST_MIN), SEARCH_BOOST_MAX)
+}
+
 const tokenizeTerm = (term: string) => {
   const tokens = term.split(/\s+/).filter((t) => t.trim() !== "")
   const tokenLen = tokens.length
@@ -489,7 +501,18 @@ async function setupSearch(searchElement: Element, currentSlug: FullSlug, data: 
       ...getByField("content"),
       ...getByField("tags"),
     ])
-    const finalResults = [...allIds].map((id) => formatForDisplay(currentSearchTerm, id))
+    // Apply per-document search boost: linear position score (preserves
+    // relevance order) multiplied by boost. Default boost = 1 → no change.
+    const ordered = [...allIds]
+    const boosted = ordered
+      .map((id, i) => {
+        const position = ordered.length - i
+        const boost = boostByIdx[id] ?? SEARCH_BOOST_DEFAULT
+        return { id, score: position * boost, i }
+      })
+      .sort((a, b) => b.score - a.score || a.i - b.i)
+      .map((x) => x.id)
+    const finalResults = boosted.map((id) => formatForDisplay(currentSearchTerm, id))
     await displayResults(finalResults)
   }
 
@@ -515,6 +538,8 @@ async function fillDocument(data: ContentIndex) {
   let id = 0
   const promises: Array<Promise<unknown>> = []
   for (const [slug, fileData] of Object.entries<ContentDetails>(data)) {
+    const boostRaw = fileData.frontmatterValues?.search_boost
+    boostByIdx[id] = normalizeBoost(boostRaw)
     promises.push(
       index.addAsync(id++, {
         id,

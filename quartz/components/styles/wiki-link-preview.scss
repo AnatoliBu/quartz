@@ -1,0 +1,142 @@
+@use "../../styles/variables.scss" as *;
+
+.wiki-link-preview {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  max-width: min(420px, calc(100vw - 32px));
+  pointer-events: auto;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(0, 0);
+  transition:
+    opacity 0.18s ease,
+    visibility 0.18s ease;
+  will-change: transform, opacity;
+
+  padding: 0.75rem 0.9rem;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--light) 92%, transparent);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  border: 1px solid color-mix(in srgb, var(--lightgray) 65%, transparent);
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.14),
+    0 2px 6px rgba(0, 0, 0, 0.08);
+  font-family: var(--bodyFont);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--dark);
+
+  &.is-visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .wlp-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    line-height: 1.25;
+    color: var(--dark);
+    margin-bottom: 0.4rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .wlp-excerpt {
+    color: var(--darkgray);
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    &.is-empty {
+      display: none;
+    }
+  }
+
+  .wlp-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: 0.5rem;
+  }
+
+  .wlp-chip {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--lightgray) 70%, transparent);
+    color: var(--darkgray);
+    white-space: nowrap;
+  }
+
+  .wlp-status[data-status="OPEN"],
+  .wlp-status[data-status="REPORTED"] {
+    background: color-mix(in srgb, #e5484d 22%, transparent);
+    color: #b52d30;
+  }
+  .wlp-status[data-status="IN PROGRESS"],
+  .wlp-status[data-status="IN_PROGRESS"] {
+    background: color-mix(in srgb, #f5a623 28%, transparent);
+    color: #a66a00;
+  }
+  .wlp-status[data-status="BLOCKED"] {
+    background: color-mix(in srgb, #8b5cf6 26%, transparent);
+    color: #6d28d9;
+  }
+  .wlp-status[data-status="TODO"] {
+    background: color-mix(in srgb, #9333ea 24%, transparent);
+    color: #7e22ce;
+  }
+  .wlp-status[data-status="DONE"],
+  .wlp-status[data-status="RESOLVED"] {
+    background: color-mix(in srgb, #46a758 28%, transparent);
+    color: #217a2e;
+  }
+  .wlp-status[data-status="CLOSED"],
+  .wlp-status[data-status="WON'T FIX"] {
+    background: color-mix(in srgb, var(--gray) 55%, transparent);
+    color: var(--darkgray);
+  }
+
+  // Drop tail indicator based on placement. Subtle, not critical for MVP.
+  &[data-placement="bottom"]::before,
+  &[data-placement="top"]::before {
+    content: "";
+    position: absolute;
+    left: 18px;
+    width: 10px;
+    height: 10px;
+    background: inherit;
+    border: inherit;
+    border-right: none;
+    border-bottom: none;
+    transform: rotate(45deg);
+    pointer-events: none;
+  }
+  &[data-placement="bottom"]::before {
+    top: -6px;
+  }
+  &[data-placement="top"]::before {
+    bottom: -6px;
+    transform: rotate(225deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+
+  // On small viewports, give the tooltip more room to read comfortably.
+  @media ($mobile) {
+    max-width: min(320px, calc(100vw - 24px));
+    font-size: 0.8rem;
+  }
+}

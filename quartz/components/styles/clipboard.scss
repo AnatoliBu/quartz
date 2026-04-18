@@ -34,3 +34,178 @@ pre {
     transition: 0.2s;
   }
 }
+
+// Collapsible code blocks (CodeEnhancements plugin, A4).
+details.code-collapse {
+  margin: 1rem 0;
+
+  & > summary.code-collapse-summary {
+    list-style: none;
+    cursor: pointer;
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.75rem;
+    font-family: var(--codeFont);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--darkgray);
+    background: color-mix(in srgb, var(--lightgray) 60%, transparent);
+    border: 1px solid var(--lightgray);
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+    &::before {
+      content: "▶";
+      display: inline-block;
+      font-size: 0.65rem;
+      transition: transform 0.15s ease;
+      color: var(--secondary);
+    }
+
+    .ccs-lang {
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--secondary);
+    }
+    .ccs-count {
+      color: var(--gray);
+      font-weight: 500;
+    }
+  }
+
+  &[open] > summary.code-collapse-summary {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    &::before {
+      transform: rotate(90deg);
+    }
+  }
+
+  & > figure[data-rehype-pretty-code-figure] {
+    margin: 0;
+    & > pre {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      margin-top: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    & > summary.code-collapse-summary::before {
+      transition: none;
+    }
+  }
+}
+
+// A2 — line-level annotations from [!code ...] markers.
+figure[data-rehype-pretty-code-figure] {
+  & pre > code {
+    & span[data-line] {
+      display: inline-block;
+      width: 100%;
+      box-sizing: border-box;
+      transition: background-color 0.15s ease, opacity 0.2s ease, filter 0.2s ease;
+      border-left: 3px solid transparent;
+      padding-left: 0.4rem;
+      margin-left: -0.4rem;
+
+      &.line-added {
+        background: color-mix(in srgb, #46a758 18%, transparent);
+        border-left-color: #46a758;
+        &::before {
+          content: "+";
+          color: #46a758;
+          display: inline-block;
+          width: 1rem;
+          margin-right: 0.15rem;
+          opacity: 0.75;
+        }
+      }
+      &.line-removed {
+        background: color-mix(in srgb, #e5484d 18%, transparent);
+        border-left-color: #e5484d;
+        &::before {
+          content: "-";
+          color: #e5484d;
+          display: inline-block;
+          width: 1rem;
+          margin-right: 0.15rem;
+          opacity: 0.75;
+        }
+      }
+      &.line-error {
+        background: color-mix(in srgb, #e5484d 22%, transparent);
+        border-left-color: #e5484d;
+      }
+      &.line-warning {
+        background: color-mix(in srgb, #f5a623 22%, transparent);
+        border-left-color: #f5a623;
+      }
+      &.line-highlight {
+        background: color-mix(in srgb, var(--secondary) 14%, transparent);
+        border-left-color: var(--secondary);
+      }
+    }
+  }
+
+  // When any line is marked [!code focus], dim everything else in the block.
+  &.has-focus {
+    & pre > code > span[data-line] {
+      filter: blur(0.03em);
+      opacity: 0.55;
+      transition:
+        filter 0.2s ease,
+        opacity 0.2s ease;
+      &.line-focus {
+        filter: none;
+        opacity: 1;
+        background: color-mix(in srgb, var(--secondary) 10%, transparent);
+        border-left-color: var(--secondary);
+      }
+    }
+    &:hover pre > code > span.line {
+      filter: none;
+      opacity: 1;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  figure[data-rehype-pretty-code-figure] pre > code span[data-line] {
+    transition: none !important;
+  }
+}
+
+// Code block title from rehype-pretty-code `title="..."` meta.
+figure[data-rehype-pretty-code-figure] {
+  margin: 1rem 0;
+
+  & > [data-rehype-pretty-code-title] {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--codeFont);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--darkgray);
+    padding: 0.35rem 0.75rem;
+    background: color-mix(in srgb, var(--lightgray) 60%, transparent);
+    border: 1px solid var(--lightgray);
+    border-bottom: none;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+  }
+
+  // Seam the title with the code block below it.
+  & > [data-rehype-pretty-code-title] + pre {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top: none;
+    margin-top: 0;
+  }
+}
