@@ -1,12 +1,11 @@
-// Single source of truth for frontmatter-driven UI (Frontmatter badges,
-// FolderContent filters, graph overlays). Imported by:
-//   - quartz/components/Frontmatter.tsx  — article-header metadata
-//   - quartz/components/FrontmatterFilters.tsx  — filter UI on folder pages
-//   - quartz/plugins/emitters/contentIndex.tsx  — extend serialized index
+// Single source of truth for Agent KB frontmatter-driven UI.
+// Imported by:
+//   - quartz/components/Frontmatter.tsx — article-header metadata
+//   - quartz/components/FrontmatterFilters.tsx — filter UI on folder pages
+//   - quartz/plugins/emitters/contentIndex.tsx — extend serialized index
 //     with frontmatter values used for filtering/overlay
 //
-// Keep this file framework-free (no JSX, no Preact imports) so emitters can
-// import it without pulling component runtime.
+// Keep this file framework-free so emitters can import it without pulling component runtime.
 
 export type FrontmatterFieldStyle = "badge" | "text"
 export type FrontmatterFieldFormat = "raw" | "date" | "relative"
@@ -26,35 +25,64 @@ export interface FrontmatterField {
 
 export const frontmatterFields: FrontmatterField[] = [
   {
+    key: "authority_tier",
+    label: "Tier",
+    style: "badge",
+    colorMap: {
+      "Tier A": "#4a90e2",
+      "Tier B": "#6aa84f",
+      "Tier C": "#f1c232",
+      "Tier D": "#9ca3af",
+    },
+  },
+  {
     key: "status",
     label: "Status",
     style: "badge",
     colorMap: {
-      OPEN: "#e5484d",
-      REPORTED: "#e5484d",
-      "IN PROGRESS": "#f5a623",
-      IN_PROGRESS: "#f5a623",
-      BLOCKED: "#8b5cf6",
-      TODO: "#9333ea",
-      DONE: "#46a758",
-      RESOLVED: "#46a758",
-      "WON'T FIX": "#6b7280",
-      CLOSED: "#6b7280",
+      foundation: "#4a90e2",
+      "foundation-context": "#4a90e2",
+      "useful-after-audit": "#6aa84f",
+      "cheat-sheet-only": "#f1c232",
+      "moodboard-only": "#9ca3af",
+      rejected: "#e06666",
+      draft: "#9ca3af",
+      quarantine: "#f5a623",
+      accepted: "#46a758",
     },
   },
   {
-    key: "severity",
-    label: "Severity",
+    key: "domain",
+    label: "Domain",
     style: "badge",
-    colorMap: { P0: "#e5484d", P1: "#f5a623", P2: "#9ca3af", P3: "#9ca3af" },
+    colorMap: {
+      sysadmin: "#e06666",
+      sre: "#e06666",
+      network: "#76a5af",
+      analytics: "#6aa84f",
+      product: "#6aa84f",
+      tooling: "#9ca3af",
+    },
   },
-  { key: "updated_at", label: "Updated", format: "relative" },
-  { key: "resolved_at", label: "Resolved", format: "date" },
+  {
+    key: "artifact_type",
+    label: "Type",
+    style: "badge",
+    colorMap: {
+      reference: "#4a90e2",
+      skill: "#76a5af",
+      agent: "#a86ec9",
+      rule: "#f1c232",
+      research: "#9ca3af",
+    },
+  },
+  { key: "owner", label: "Owner" },
+  { key: "last_checked", label: "Checked", format: "date" },
 ]
 
 // Keys emitted into static/contentIndex.json for client-side filtering/overlay.
-// Derived from frontmatterFields plus additional non-UI keys (e.g. search_boost).
-export const extraIndexedKeys: string[] = ["search_boost", "has_steps"]
+// Derived from frontmatterFields plus additional non-UI keys.
+export const extraIndexedKeys: string[] = ["search_boost", "source_url"]
 
 export const indexedFrontmatterKeys: string[] = [
   ...frontmatterFields.map((f) => f.key),
