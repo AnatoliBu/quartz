@@ -18,22 +18,27 @@ const defaultOptions: BacklinksOptions = {
   groupByFolder: true,
 }
 
-// Stable display order for known folders. Anything else goes to "other".
+// Stable display order for Agent KB domains. Anything else goes to "other".
 const FOLDER_ORDER = [
-  "bugs",
-  "tasks",
-  "spec-issues",
-  "coupons",
-  "coverage",
-  "journey",
-  "partner",
-  "client",
-  "payments",
-  "ordering",
-  "gateway",
-  "auth",
-  "common",
+  "references",
+  "skills",
+  "agents",
+  "rules",
+  "sysadmin",
+  "analytics",
+  "generated",
 ]
+
+const FOLDER_LABELS: Record<string, string> = {
+  references: "References",
+  skills: "Skills",
+  agents: "Agents",
+  rules: "Rules",
+  sysadmin: "Sysadmin",
+  analytics: "Analytics",
+  generated: "Generated",
+  other: "Other",
+}
 
 function folderOf(slug: string | undefined): string {
   if (!slug) return "other"
@@ -43,8 +48,7 @@ function folderOf(slug: string | undefined): string {
 }
 
 function folderLabel(key: string): string {
-  if (key === "other") return "Прочее"
-  return key
+  return FOLDER_LABELS[key] ?? key
 }
 
 type Group = { key: string; items: QuartzPluginData[] }
