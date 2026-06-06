@@ -18,23 +18,26 @@
     }
 
     --backlink-color: var(--secondary);
-    &[data-folder="bugs"] {
-      --backlink-color: #e06666;
-    }
-    &[data-folder="tasks"] {
+    &[data-folder="references"] {
       --backlink-color: #4a90e2;
     }
-    &[data-folder="spec-issues"] {
+    &[data-folder="skills"] {
+      --backlink-color: #76a5af;
+    }
+    &[data-folder="agents"] {
       --backlink-color: #a86ec9;
     }
-    &[data-folder="coupons"] {
-      --backlink-color: #6aa84f;
-    }
-    &[data-folder="coverage"] {
+    &[data-folder="rules"] {
       --backlink-color: #f1c232;
     }
-    &[data-folder="journey"] {
-      --backlink-color: #14b8a6;
+    &[data-folder="sysadmin"] {
+      --backlink-color: #e06666;
+    }
+    &[data-folder="analytics"] {
+      --backlink-color: #6aa84f;
+    }
+    &[data-folder="generated"] {
+      --backlink-color: #9ca3af;
     }
   }
 
