@@ -13,8 +13,8 @@ export const sharedPageComponents: SharedLayout = {
   ],
   footer: Component.Footer({
     links: {
-      GitHub: "https://github.com/jackyzha0/quartz",
-      "Discord Community": "https://discord.gg/cRFFHYye7t",
+      GitHub: "https://github.com/AnatoliBu/sh/tree/main/sysadmin-analytics-agent-kb",
+      Quartz: "https://github.com/AnatoliBu/quartz",
     },
   }),
 }
@@ -70,11 +70,13 @@ export const defaultContentPageLayout: PageLayout = {
         persistPositions: true,
         autoColorFolders: true,
         colorGroups: {
-          "bugs/": "#e06666",
-          "tasks/": "#4a90e2",
-          "spec-issues/": "#a86ec9",
-          "coupons/": "#6aa84f",
-          "coverage/": "#f1c232",
+          "references/": "#4a90e2",
+          "sysadmin/": "#e06666",
+          "analytics/": "#6aa84f",
+          "agents/": "#a86ec9",
+          "rules/": "#f1c232",
+          "skills/": "#76a5af",
+          "generated/": "#9ca3af",
         },
       },
     }),
