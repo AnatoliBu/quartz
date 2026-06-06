@@ -1,0 +1,49 @@
+name: Agent KB Quartz smoke
+
+on:
+  push:
+    branches:
+      - agent-kb-v5
+  pull_request:
+    branches:
+      - agent-kb-v5
+
+jobs:
+  smoke-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Create minimal content
+        run: |
+          rm -rf content
+          mkdir -p content/references content/agents content/rules
+          cat > content/index.md <<'EOF'
+          # Agent KB smoke
+
+          - [Reference](references/example.md)
+          - [Agent](agents/example-agent.md)
+          EOF
+          cat > content/references/example.md <<'EOF'
+          # Reference: Example
+
+          ## Authority tier
+
+          Tier A
+          EOF
+          cat > content/agents/example-agent.md <<'EOF'
+          # Agent: Example
+
+          ## Reference links
+
+          - [Reference: Example](../references/example.md)
+          EOF
+      - run: npm ci
+      - name: Install Quartz plugins if available
+        run: |
+          if npm run | grep -q "install-plugins"; then
+            npm run install-plugins
+          fi
+      - run: npx quartz build
