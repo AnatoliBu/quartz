@@ -2,20 +2,24 @@ import { QuartzConfig } from "./quartz/cfg"
 import * as Plugin from "./quartz/plugins"
 
 /**
- * Quartz 4 Configuration
+ * Agent KB Quartz configuration.
  *
- * See https://quartz.jzhao.xyz/configuration for more information.
+ * This branch is the staging area for the Agent KB v5 port. Until the branch is
+ * rebased onto a true Quartz v5 tree, this v4-compatible config keeps the
+ * deployment focused on the same phase-1 requirements:
+ * curated content, correct GitHub Pages base URL, graph/search/explorer/backlinks,
+ * and no research/deployment/tooling noise in the published site.
  */
 const config: QuartzConfig = {
   configuration: {
-    pageTitle: "apps-api-tests",
-    pageTitleSuffix: " | QA Notes",
+    pageTitle: "Agent KB",
+    pageTitleSuffix: " | Source of Truth",
     enableSPA: true,
     enablePopovers: false,
     analytics: null,
-    locale: "ru-RU",
-    baseUrl: "localhost:8080",
-    ignorePatterns: ["private", "templates", ".obsidian", "archive"],
+    locale: "en-US",
+    baseUrl: "anatolibu.github.io/sh",
+    ignorePatterns: ["private", "templates", ".obsidian", "archive", "research", "site", "references/tooling"],
     defaultDateType: "created",
     theme: {
       fontOrigin: "googleFonts",
@@ -87,7 +91,7 @@ const config: QuartzConfig = {
       Plugin.Static(),
       Plugin.Favicon(),
       Plugin.NotFoundPage(),
-      // Plugin.CustomOgImages(),  // disabled for local use
+      // Plugin.CustomOgImages(),  // disabled for Agent KB deploy speed
     ],
   },
 }
