@@ -15,3 +15,96 @@ article[data-has-steps="true"] {
     }
   }
 }
+
+// Agent KB landing page. Cards are generated from */agent.md by the sh repository;
+// the renderer deliberately has no knowledge of concrete domain names.
+.domain-summary {
+  color: var(--gray);
+  margin: 0.25rem 0 1.5rem;
+}
+
+.domain-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1rem;
+  margin: 1rem 0 2rem;
+}
+
+a.domain-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 13rem;
+  padding: 1.1rem 1.2rem;
+  border: 1px solid var(--lightgray);
+  border-radius: 0.8rem;
+  background: var(--light);
+  color: var(--darkgray);
+  text-decoration: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: transform 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    border-color: var(--secondary);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 1.12rem;
+    line-height: 1.25;
+  }
+
+  p {
+    margin: 0;
+    color: var(--gray);
+    line-height: 1.45;
+  }
+}
+
+.domain-card__topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-family: var(--codeFont);
+  font-size: 0.72rem;
+}
+
+.domain-card__slug {
+  color: var(--secondary);
+}
+
+.domain-card__status {
+  padding: 0.16rem 0.45rem;
+  border: 1px solid var(--lightgray);
+  border-radius: 999px;
+  color: var(--gray);
+}
+
+.domain-card__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: auto;
+}
+
+.domain-card__stat {
+  padding: 0.22rem 0.48rem;
+  border-radius: 0.4rem;
+  background: var(--lightgray);
+  color: var(--darkgray);
+  font-family: var(--codeFont);
+  font-size: 0.72rem;
+}
+
+@media (max-width: 600px) {
+  .domain-grid {
+    grid-template-columns: 1fr;
+  }
+
+  a.domain-card {
+    min-height: auto;
+  }
+}
